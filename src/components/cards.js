@@ -1,43 +1,29 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 
 export default function Cards() {
-  useEffect(() => {
-    var slideIndex = 0;
-    carousel();
+  const [slideIndex, setSlideIndex] = useState(0);
 
-    function carousel() {
-      var i;
-      var x = document.getElementsByClassName("mySlides");
-      for (i = 0; i < x.length; i++) {
-        x[i].style.display = "none";
-      }
-      slideIndex++;
-      if (slideIndex > x.length) {
-        slideIndex = 1;
-      }
-      x[slideIndex - 1].style.display = "block";
-      setTimeout(carousel, 2000);
-    }
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setSlideIndex((prevIndex) => (prevIndex + 1) % 3);
+    }, 1000);
+
+    return () => clearInterval(interval);
   }, []);
 
   return (
     <div className="flex justify-center w-[1300px] z-10 border border-black m-24 rounded-3xl p-10">
       <div className="w-[500px]">
-        <img
-          src={process.env.PUBLIC_URL + "/download.jpg"}
-          className="mySlides"
-          alt="Slide 1"
-        />
-        <img
-          src={process.env.PUBLIC_URL + "/downloade.jpg"}
-          className="mySlides"
-          alt="Slide 2"
-        />
-        <img
-          src={process.env.PUBLIC_URL + "/downloaded.jpg"}
-          className="mySlides"
-          alt="Slide 3"
-        />
+        {[1, 2, 3].map((index) => (
+          <img
+            key={index}
+            src={process.env.PUBLIC_URL + `/download${index}.jpg`}
+            className={`mySlides ${
+              index === slideIndex + 1 ? "block" : "hidden"
+            }`}
+            alt={`Slide ${index}`}
+          />
+        ))}
       </div>
       <div className="flex flex-col">
         <p className="font-serif font-semibold text-2xl">
